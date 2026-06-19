@@ -1,0 +1,15 @@
+{{ define "queue.html" }}
+<div id="queues">
+	<h2>Queues</h2>
+
+	{{ range .Queues }}
+		<div>
+			<strong>{{ .Label }}</strong>
+			<p>Count: {{ .Count }}</p>
+			<p>Longest: {{ .Longest }}</p>
+		</div>
+	{{ else }}
+		<p>No queue data available.</p>
+	{{ end }}
+</div>
+{{ end }}

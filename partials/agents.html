@@ -1,0 +1,12 @@
+{{ define "agents.html" }}
+{{ range .Agents }}
+	<div>
+		<strong>{{ index .Name 0 }}</strong>
+		<p>Team: {{ .TeamName }}</p>
+		<p>Status: {{ .State }}</p>
+		<p>Last changed: {{ .StatusChange }}</p>
+	</div>
+{{ else }}
+	<p>No agent data available.</p>
+{{ end }}
+{{ end }}

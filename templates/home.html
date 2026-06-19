@@ -1,0 +1,27 @@
+{{ define "content" }}
+<h1>{{ .Title }}</h1>
+
+<section>
+	<h2>Queues</h2>
+
+	<div
+		id="queue-section"
+		hx-get="/queues"
+		hx-trigger="load, every 5s"
+		hx-swap="innerHTML">
+		Loading queues...
+	</div>
+</section>
+
+<section>
+	<h2>Agents</h2>
+
+	<div
+		id="agent-section"
+		hx-get="/agents"
+		hx-trigger="load, every 5s"
+		hx-swap="innerHTML">
+		Loading agents...
+	</div>
+</section>
+{{ end }}
