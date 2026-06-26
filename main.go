@@ -71,7 +71,7 @@ func (app *App) handleQueues(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	app.renderPartial(w, "queue.html", PageData{
+	app.renderPartial(w, "queues.html", PageData{
 		Queues: queues,
 	})
 }
