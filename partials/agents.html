@@ -1,12 +1,75 @@
-{{ define "agents.html" }}
-{{ range .Agents }}
+<div class="grid grid-cols-4 gap-4">
 	<div>
-		<strong>{{ index .Name 0 }}</strong>
-		<p>Team: {{ .TeamName }}</p>
-		<p>Status: {{ .State }}</p>
-		<p>Last changed: {{ .StatusChange }}</p>
+		<h2>Available</h2>
+		{{ range .Agents }}
+			{{ if eq .State "available" }}
+				<strong>{{ index .Name 0 }}</strong>
+				<p>Team: {{ .TeamName }}</p>
+				<p>Status: {{ .State }}</p>
+				<p>Last changed: {{ .StatusChange }}</p>			
+			{{ end }}
+		{{ end }}
 	</div>
-{{ else }}
-	<p>No agent data available.</p>
-{{ end }}
-{{ end }}
+
+	<div>
+		<h2>On Call</h2>
+		{{ range .Agents }}
+			{{ if eq .State "connected" }}
+				<strong>{{ index .Name 0 }}</strong>
+				<p>Team: {{ .TeamName }}</p>
+				<p>Status: {{ .State }}</p>
+				<p>Last changed: {{ .StatusChange }}</p>			
+			{{ end }}
+		{{ end }}
+	</div>
+
+	<div>
+		<h2>Tasks</h2>
+		{{ range .Agents }}
+			{{ if eq .State "tasks" }}
+				<strong>{{ index .Name 0 }}</strong>
+				<p>Team: {{ .TeamName }}</p>
+				<p>Status: {{ .State }}</p>
+				<p>Last changed: {{ .StatusChange }}</p>			
+			{{ end }}
+		{{ end }}
+	</div>
+
+	<div>
+		<h2>RONA</h2>
+		{{ range .Agents }}
+			{{ if eq .State "rona" }}
+				<strong>{{ index .Name 0 }}</strong>
+				<p>Team: {{ .TeamName }}</p>
+				<p>Status: {{ .State }}</p>
+				<p>Last changed: {{ .StatusChange }}</p>			
+			{{ end }}
+		{{ end }}
+	</div>
+
+	<div>
+		<h2>Consulting</h2>
+		{{ range .Agents }}
+			{{ if eq .State "consulting" }}
+				<strong>{{ index .Name 0 }}</strong>
+				<p>Team: {{ .TeamName }}</p>
+				<p>Status: {{ .State }}</p>
+				<p>Last changed: {{ .StatusChange }}</p>			
+			{{ end }}
+		{{ end }}
+	</div>
+
+	<div>
+		<h2>LiveChat</h2>
+		{{ range .Agents }}
+			{{ if eq .State "livechat" }}
+				<strong>{{ index .Name 0 }}</strong>
+				<p>Team: {{ .TeamName }}</p>
+				<p>Status: {{ .State }}</p>
+				<p>Last changed: {{ .StatusChange }}</p>			
+			{{ end }}
+		{{ end }}
+	</div>
+
+</div>
+
