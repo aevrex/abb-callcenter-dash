@@ -100,7 +100,7 @@ func (app *App) handleQueues(w http.ResponseWriter, r *http.Request) {
 		Queues: queues,
 		StateCounts: map[string]map[string]map[string]int{
 			"Res CS":    countByState(csAgents),
-			"Residential Sales": countByState(salesAgents),
+			"Res Sales": countByState(salesAgents),
 		},
 	})
 }

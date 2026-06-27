@@ -1,29 +1,72 @@
 {{ define "tvQueues.html" }}
-    <div class="grid gap-4 sm:grid-cols-3 lg:grid-cols-6">
+<div class="h-full min-h-0 bg-gray-950">
+    <div class="grid h-full min-h-0 grid-cols-3 auto-rows-fr gap-6">
+
         {{ range .Queues }}
-            <div class="rounded-lg border border-slate-200 bg-slate-50 p-4">
-                <strong class="block text-sm font-semibold text-slate-800">{{ .Label }}</strong>
+            <div class="min-h-0 h-full rounded-xl bg-gray-900 border-2 border-indigo-700 p-6 flex flex-col gap-5 overflow-hidden">
 
-                <div class="mt-3 space-y-1 text-sm text-slate-600">
-                    <p>
-						<span class="text-slate-400">In Queue:</span>
-						<span class="font-medium text-slate-900">{{ .Count }}</span>
-                    </p>
+                <h3 class="shrink-0 text-2xl font-bold text-white tracking-wide border-b border-indigo-900 pb-3 truncate">
+                    {{ .Label }}
+                </h3>
 
-                    <p>
-                        <span class="text-slate-400">Queue Time:</span>
-                        <span class="font-medium text-slate-900">{{ .Longest }}</span>
-                    </p>
-                    {{ if eq .Label "Res CS" }}
-                        <p>L1 Available: {{ index (index $.StateCounts "Level1") "available" }}</p>
-                        <p>AEs Available: {{ index (index $.StateCounts "Customer Service - AE") "available" }}</p>
-                        <p>Agents in RONA: {{ index (index $.StateCounts "Level1") "rona" }}</p>
-                    {{ end }}
+                {{/* Primary metrics - big and bold */}}
+                <div class="shrink-0 grid grid-cols-2 gap-4">
+                    <div class="rounded-lg bg-gray-800 p-4 text-center overflow-hidden">
+                        <p class="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-1">
+                            In Queue
+                        </p>
+                        <p class="text-5xl font-black text-white leading-none">
+                            {{ .Count }}
+                        </p>
+                    </div>
+
+                    <div class="rounded-lg bg-gray-800 p-4 text-center overflow-hidden">
+                        <p class="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-1">
+                            Wait Time
+                        </p>
+                        <p class="text-4xl font-black text-white leading-none truncate">
+                            {{ .Longest }}
+                        </p>
+                    </div>
                 </div>
+
+                {{/* Agent availability */}}
+                <div class="flex-1 min-h-0 flex flex-col justify-evenly gap-2 overflow-hidden">
+                    <div class="flex items-center justify-between rounded-lg bg-emerald-950 border border-emerald-800 px-4 py-3">
+                        <span class="text-sm font-semibold text-emerald-400 uppercase tracking-wide truncate">
+                            TL Available
+                        </span>
+                        <span class="shrink-0 text-3xl font-black text-emerald-300">
+                            {{ index (index (index $.StateCounts .Label) "Level 2 CS") "available" }}
+                        </span>
+                    </div>
+
+                    <div class="flex items-center justify-between rounded-lg bg-emerald-950 border border-emerald-800 px-4 py-3">
+                        <span class="text-sm font-semibold text-emerald-400 uppercase tracking-wide truncate">
+                            AE Available
+                        </span>
+                        <span class="shrink-0 text-3xl font-black text-emerald-300">
+                            {{ index (index (index $.StateCounts .Label) "Customer Service - AE") "available" }}
+                        </span>
+                    </div>
+
+                    <div class="flex items-center justify-between rounded-lg bg-red-950 border border-red-800 px-4 py-3">
+                        <span class="text-sm font-semibold text-red-400 uppercase tracking-wide truncate">
+                            In RONA
+                        </span>
+                        <span class="shrink-0 text-3xl font-black text-red-300">
+                            {{ index (index (index $.StateCounts .Label) "Level1") "rona" }}
+                        </span>
+                    </div>
+                </div>
+
             </div>
         {{ else }}
-            <p class="text-sm text-slate-500">No calls in any queues.</p>
+            <p class="col-span-3 text-center text-2xl text-gray-600 mt-20">
+                No calls in any queues.
+            </p>
         {{ end }}
+
     </div>
 </div>
 {{ end }}

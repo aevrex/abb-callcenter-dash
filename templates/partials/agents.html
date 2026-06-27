@@ -1,72 +1,58 @@
 {{ define "agents.html" }}
-<div class="space-y-1">
-    <div class="grid gap-2 md:grid-cols-3 xl:grid-cols-3">
-        <div class="rounded-lg bg-green-50 border border-slate-200 p-4">
-            <h3 class="mb-3 text-sm font-semibold text-emerald-700">Available</h3>
+<div class="h-full min-h-0">
+    <div class="grid h-full min-h-0 gap-2 md:grid-cols-3 xl:grid-cols-3">
 
-				<div class="flex max-h-[70vh] flex-col flex-wrap gap-1 overflow-x-auto">
+        {{/* Available */}}
+        <div class="rounded-lg bg-gray-900 border-2 border-emerald-800 p-4 flex flex-col min-h-0">
+            <h3 class="mb-3 shrink-0 text-sm font-semibold text-emerald-400">Available</h3>
+            <div class="flex-1 min-h-0 flex flex-col flex-wrap gap-1 overflow-x-auto content-start">
                 {{ range .Agents }}
-    				{{ if and (eq .State "available") (ne .TeamName "Level 2 CS") (ne .TeamName "Customer Service - AE")}}
-						<div class="rounded-md bg-white px-3 py-2 shadow-sm">
-							<div class="flex items-center justify-between gap-2">
-								<strong class="truncate text-sm text-slate-900">
-									{{ index .Name 0 }}
-								</strong>
-
-								<span class="shrink-0 text-xs text-slate-500">
-									{{ .StatusChange }}
-								</span>
-							</div>
-						</div>
+                    {{ if and (eq .State "available") (ne .TeamName "Level 2 CS") (ne .TeamName "Customer Service - AE") }}
+                        <div class="rounded-md bg-emerald-900 px-3 py-2">
+                            <div class="flex items-center justify-between gap-2">
+                                <strong class="truncate text-sm text-gray-100">{{ index .Name 0 }}</strong>
+                                <span class="shrink-0 text-xs text-gray-500">{{ .StatusChange }}</span>
+                            </div>
+                        </div>
                     {{ end }}
                 {{ end }}
             </div>
         </div>
 
-        <div class="rounded-lg border border-slate-200 bg-blue-50 p-4">
-            <h3 class="mb-3 text-sm font-semibold text-blue-700">On Call</h3>
-
-				<div class="flex max-h-[70vh] flex-col flex-wrap gap-1 overflow-x-auto">
+        {{/* On Call */}}
+        <div class="rounded-lg bg-gray-900 border-2 border-blue-800 p-4 flex flex-col min-h-0">
+            <h3 class="mb-3 shrink-0 text-sm font-semibold text-blue-400">On Call</h3>
+            <div class="flex-1 min-h-0 flex flex-col flex-wrap gap-1 overflow-x-auto content-start">
                 {{ range .Agents }}
                     {{ if and (eq .State "connected") (ne .TeamName "Level 2 CS") (ne .TeamName "Customer Service - AE") }}
-
-                        <div class="rounded-md bg-white px-2 py-1 shadow-sm">
-							<div class="flex items-center justify-between gap-1">
-								<strong class="truncate text-sm text-slate-900">
-									{{ index .Name 0 }}
-								</strong>
-
-								<span class="shrink-0 text-xs text-slate-500">
-									{{ .StatusChange }}
-								</span>
-							</div>
-						</div>
+                        <div class="rounded-md bg-blue-900 px-2 py-1">
+                            <div class="flex items-center justify-between gap-1">
+                                <strong class="truncate text-sm text-gray-100">{{ index .Name 0 }}</strong>
+                                <span class="shrink-0 text-xs text-gray-500">{{ .StatusChange }}</span>
+                            </div>
+                        </div>
                     {{ end }}
                 {{ end }}
             </div>
         </div>
 
-        <div class="rounded-lg border border-slate-200 bg-red-50 p-4">
-            <h3 class="mb-3 text-sm font-semibold text-red-700">RONA</h3>
-
-            <div class="space-y-3">
+        {{/* RONA */}}
+        <div class="rounded-lg bg-gray-900 border-2 border-red-800 p-4 flex flex-col min-h-0">
+            <h3 class="mb-3 shrink-0 text-sm font-semibold text-red-400">RONA</h3>
+            <div class="flex-1 min-h-0 flex flex-col flex-wrap gap-1 overflow-x-auto content-start">
                 {{ range .Agents }}
                     {{ if and (eq .State "rona") (ne .TeamName "Level 2 CS") (ne .TeamName "Customer Service - AE") }}
-                        <div class="rounded-md bg-white px-3 py-2 shadow-sm">
-							<div class="flex items-center justify-between gap-4">
-								<strong class="truncate text-sm text-slate-900">
-									{{ index .Name 0 }}
-								</strong>
-
-								<span class="shrink-0 text-xs text-slate-500">
-									{{ .StatusChange }}
-								</span>
-							</div>
-						</div>
+                        <div class="rounded-md bg-red-900 px-3 py-2">
+                            <div class="flex items-center justify-between gap-4">
+                                <strong class="truncate text-sm text-gray-100">{{ index .Name 0 }}</strong>
+                                <span class="shrink-0 text-xs text-gray-500">{{ .StatusChange }}</span>
+                            </div>
+                        </div>
                     {{ end }}
                 {{ end }}
             </div>
         </div>
+
     </div>
 </div>
 {{ end }}

@@ -1,22 +1,14 @@
 {{ define "content" }}
-<section>
-    <div
-        id="queue-section"
-        hx-get="/queues"
-        hx-trigger="load, every 5s"
-        hx-swap="innerHTML"
-        class="rounded-xl border border-slate-200 bg-gray-800 p-2 shadow-sm">
+<section class="shrink-0">
+    <div id="queue-section" hx-get="/queues" hx-trigger="load, every 2s" hx-swap="innerHTML"
+        class="rounded-xl border border-slate-900 bg-gray-800 p-2 shadow-sm">
         <p class="text-sm text-slate-500">Loading queues...</p>
     </div>
 </section>
 
-<section>
-    <div
-        id="agent-section"
-        hx-get="/agents"
-        hx-trigger="load, every 5s"
-        hx-swap="innerHTML"
-        class="rounded-xl border border-slate-200 bg-white p-2 shadow-sm">
+<section class="flex-1 min-h-0 overflow-hidden">
+    <div id="agent-section" hx-get="/agents" hx-trigger="load, every 2s" hx-swap="innerHTML"
+        class="h-full rounded-xl border border-slate-900 bg-gray-800 p-2 shadow-sm overflow-hidden">
         <p class="text-sm text-slate-500">Loading agents...</p>
     </div>
 </section>

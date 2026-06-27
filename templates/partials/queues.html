@@ -1,29 +1,33 @@
 {{ define "queues.html" }}
     <div class="grid gap-4 sm:grid-cols-3 lg:grid-cols-6">
         {{ range .Queues }}
-            <div class="rounded-lg border border-slate-200 bg-slate-50 p-4">
-                <strong class="block text-sm font-semibold text-slate-800">{{ .Label }}</strong>
-
-                <div class="mt-3 space-y-1 text-sm text-slate-600">
-                    <p>
-						<span class="text-slate-400">In Queue:</span>
-						<span class="font-medium text-slate-900">{{ .Count }}</span>
+            <div class="rounded-lg bg-gray-900 border-2 border-indigo-800 p-4">
+                <h3 class="mb-3 text-md font-semibold text-white">{{ .Label }}</h3>
+                <div class="space-y-1 text-sm">
+                    <p class="flex justify-between gap-2">
+                        <span class="text-gray-500">In Queue</span>
+                        <span class="font-medium text-gray-100">{{ .Count }}</span>
                     </p>
-
-                    <p>
-                        <span class="text-slate-400">Queue Time:</span>
-                        <span class="font-medium text-slate-900">{{ .Longest }}</span>
+                    <p class="flex justify-between gap-2">
+                        <span class="text-gray-500">Queue Time</span>
+                        <span class="font-medium text-gray-100">{{ .Longest }}</span>
                     </p>
-                    {{ if eq .Label "Res CS" }}
-                        <p>L1 Available: {{ index (index $.StateCounts "Level1") "available" }}</p>
-                        <p>AEs Available: {{ index (index $.StateCounts "Customer Service - AE") "available" }}</p>
-                        <p>Agents in RONA: {{ index (index $.StateCounts "Level1") "rona" }}</p>
-                    {{ end }}
+                    <p class="flex justify-between gap-2">
+                        <span class="text-gray-500">TL Available</span>
+                        <span class="font-medium text-emerald-400">{{ index (index (index $.StateCounts .Label) "Level 2 CS") "available" }}</span>
+                    </p>
+                    <p class="flex justify-between gap-2">
+                        <span class="text-gray-500">AE Available</span>
+                        <span class="font-medium text-emerald-400">{{ index (index (index $.StateCounts .Label) "Customer Service - AE") "available" }}</span>
+                    </p>
+                    <p class="flex justify-between gap-2">
+                        <span class="text-gray-500">In RONA</span>
+                        <span class="font-medium text-red-400">{{ index (index (index $.StateCounts .Label) "Level1") "rona" }}</span>
+                    </p>
                 </div>
             </div>
         {{ else }}
-            <p class="text-sm text-slate-500">No calls in any queues.</p>
+            <p class="text-sm text-gray-500">No calls in any queues.</p>
         {{ end }}
     </div>
-</div>
 {{ end }}

@@ -1,12 +1,11 @@
 {{ define "content" }}
-<section>
-    <div
-        id="queue-section"
-        hx-get="/tvQueues"
-        hx-trigger="load, every 5s"
-        hx-swap="innerHTML"
-        class="rounded-xl border border-slate-200 bg-gray-800 p-2 shadow-sm">
-        <p class="text-sm text-slate-500">Loading queues...</p>
+<div class="h-screen bg-gray-950 text-white p-4 font-sans flex flex-col gap-4">
+    <div class="shrink-0"
+        hx-get="/tvqueues"
+        hx-trigger="load, every 30s"
+        hx-swap="innerHTML">
+        <p class="text-xs text-gray-600">Loading queues...</p>
     </div>
-</section>
+
+</div>
 {{ end }}
