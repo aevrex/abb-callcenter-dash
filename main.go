@@ -48,6 +48,7 @@ func (app *App) routes() {
 	app.router.HandleFunc("/", app.handleHome).Methods("GET")
 	app.router.HandleFunc("/TV", app.handleTV).Methods("GET")
 	app.router.HandleFunc("/queues", app.handleQueues).Methods("GET")
+	app.router.HandleFunc("/tvqueues", app.handleQueues).Methods("GET")
 	app.router.HandleFunc("/agents", app.handleAgents).Methods("GET")
 }
 
@@ -89,6 +90,32 @@ func (app *App) handleQueues(w http.ResponseWriter, r *http.Request) {
 	}
 
 	app.renderPartial(w, "queues.html", PageData{
+		Queues: queues,
+		StateCounts: countByState(agents),
+
+	})
+}
+
+func (app *App) handleTVQueues(w http.ResponseWriter, r *http.Request) {
+	queueURL := "http://dashboardbeo01.prd.aussiebb.io/api/v1/queues/"
+	agentsURL := "http://dashboardbeo01.prd.aussiebb.io/api/v1/agents?team=rcs"
+
+
+	queues, err := fetchQueueData(queueURL)
+	if err != nil {
+		http.Error(w, "Failed to fetch queue data", http.StatusInternalServerError)
+		log.Println("failed to fetch queue data:", err)
+		return
+	}
+
+	agents, err := fetchAgentData(agentsURL)
+	if err != nil {
+		http.Error(w, "Failed to fetch agent data", http.StatusInternalServerError)
+		log.Println("failed to fetch agent data:", err)
+		return
+	}
+
+	app.renderPartial(w, "tvQueues.html", PageData{
 		Queues: queues,
 		StateCounts: countByState(agents),
 
