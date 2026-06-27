@@ -1,0 +1,24 @@
+{{ define "queues.html" }}
+    <div class="grid gap-4 sm:grid-cols-3 lg:grid-cols-6">
+        {{ range .Queues }}
+            <div class="rounded-lg border border-slate-200 bg-slate-50 p-4">
+                <strong class="block text-sm font-semibold text-slate-800">{{ .Label }}</strong>
+
+                <div class="mt-3 space-y-1 text-sm text-slate-600">
+                    <p>
+						<span class="text-slate-400">In Queue:</span>
+						<span class="font-medium text-slate-900">{{ .Count }}</span>
+                    </p>
+
+                    <p>
+                        <span class="text-slate-400">Queue Time:</span>
+                        <span class="font-medium text-slate-900">{{ .Longest }}</span>
+                    </p>
+                </div>
+            </div>
+        {{ else }}
+            <p class="text-sm text-slate-500">No calls in any queues.</p>
+        {{ end }}
+    </div>
+</div>
+{{ end }}

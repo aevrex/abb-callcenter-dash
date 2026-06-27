@@ -18,6 +18,8 @@ type PageData struct {
 	Title  string
 	Agents []AgentData
 	Queues []QueueData
+	StateCounts map[string]int
+
 }
 
 type QueueData struct {
@@ -45,6 +47,7 @@ func NewApp() *App {
 
 func (app *App) routes() {
 	app.router.HandleFunc("/", app.handleHome).Methods("GET")
+	app.router.HandleFunc("/TV", app.handleTV).Methods("GET")
 	app.router.HandleFunc("/queues", app.handleQueues).Methods("GET")
 	app.router.HandleFunc("/agents", app.handleAgents).Methods("GET")
 }
@@ -61,8 +64,16 @@ func (app *App) handleHome(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+func (app *App) handleTV(w http.ResponseWriter, r *http.Request) {
+	app.render(w, "TV.html", PageData{
+		Title: "TV View",
+	})
+}
+
 func (app *App) handleQueues(w http.ResponseWriter, r *http.Request) {
 	queueURL := "http://dashboardbeo01.prd.aussiebb.io/api/v1/queues/"
+	agentsURL := "http://dashboardbeo01.prd.aussiebb.io/api/v1/agents?team=rcs"
+
 
 	queues, err := fetchQueueData(queueURL)
 	if err != nil {
@@ -71,8 +82,17 @@ func (app *App) handleQueues(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	agents, err := fetchAgentData(agentsURL)
+	if err != nil {
+		http.Error(w, "Failed to fetch agent data", http.StatusInternalServerError)
+		log.Println("failed to fetch agent data:", err)
+		return
+	}
+
 	app.renderPartial(w, "queues.html", PageData{
 		Queues: queues,
+		StateCounts: countByState(agents),
+
 	})
 }
 
@@ -87,7 +107,7 @@ func (app *App) handleAgents(w http.ResponseWriter, r *http.Request) {
 	}
 
 	app.renderPartial(w, "agents.html", PageData{
-		Agents: agents,
+		Agents:      agents,
 	})
 }
 
@@ -170,6 +190,14 @@ func fetchAgentData(url string) ([]AgentData, error) {
 	}
 
 	return agentData, nil
+}
+
+func countByState(agents []AgentData) map[string]int {
+	counts := make(map[string]int)
+	for _, agent := range agents {
+		counts[agent.State]++
+	}
+	return counts
 }
 
 func main() {
