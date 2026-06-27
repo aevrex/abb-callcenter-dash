@@ -134,8 +134,8 @@ func (app *App) handleTVQueues(w http.ResponseWriter, r *http.Request) {
 	app.renderPartial(w, "tvQueues.html", PageData{
 		Queues: queues,
 		StateCounts: map[string]map[string]map[string]int{
-			"cs":    countByState(csAgents),
-			"sales": countByState(salesAgents),
+			"Res CS":    countByState(csAgents),
+			"Residential Sales": countByState(salesAgents),
 		},
 	})
 }
