@@ -18,8 +18,7 @@ type PageData struct {
 	Title  string
 	Agents []AgentData
 	Queues []QueueData
-	StateCounts map[string]int
-
+ 	StateCounts map[string]map[string]int
 }
 
 type QueueData struct {
@@ -192,12 +191,15 @@ func fetchAgentData(url string) ([]AgentData, error) {
 	return agentData, nil
 }
 
-func countByState(agents []AgentData) map[string]int {
-	counts := make(map[string]int)
-	for _, agent := range agents {
-		counts[agent.State]++
-	}
-	return counts
+func countByState(agents []AgentData) map[string]map[string]int {
+    counts := make(map[string]map[string]int)
+    for _, agent := range agents {
+        if counts[agent.TeamName] == nil {
+            counts[agent.TeamName] = make(map[string]int)
+        }
+        counts[agent.TeamName][agent.State]++
+    }
+    return counts
 }
 
 func main() {
