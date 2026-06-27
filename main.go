@@ -48,7 +48,7 @@ func (app *App) routes() {
 	app.router.HandleFunc("/", app.handleHome).Methods("GET")
 	app.router.HandleFunc("/TV", app.handleTV).Methods("GET")
 	app.router.HandleFunc("/queues", app.handleQueues).Methods("GET")
-	app.router.HandleFunc("/tvqueues", app.handleQueues).Methods("GET")
+	app.router.HandleFunc("/tvqueues", app.handleTVQueues).Methods("GET")
 	app.router.HandleFunc("/agents", app.handleAgents).Methods("GET")
 }
 
