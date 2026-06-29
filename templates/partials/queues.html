@@ -2,6 +2,7 @@
     <div class="grid gap-4 sm:grid-cols-3 lg:grid-cols-6">
         {{ range .Queues }}
 
+        {{ if and (ne .Label "Wholesale Support") (ne .Label "SMB Inbound Sales") }}
             {{ $tlTeam := "Level 2 CS" }}
             {{ $aeTeam := "Customer Service - AE" }}
             {{ $level1Team := "Customer Service" }}
@@ -9,18 +10,18 @@
             {{ if eq .Label "Res Sales" }}
                 {{ $tlTeam = "TL Sales" }}
                 {{ $aeTeam = "Sales - AE" }}
-                {{ $level1Team = "Sales" }}
+                {{ $level1Team = "Residential Sales" }}
             {{ else if eq .Label "Billing" }}
                 {{ $tlTeam = "Level 2 Billing" }}
                 {{ $aeTeam = "Billing - AE" }}
                 {{ $level1Team = "Billing" }}
-            {{ else if eq .Label "Wholesale Support" }}
-                {{ $tlTeam = "Level 2 Wholesale" }}
-                {{ $aeTeam = "Wholesale - AE" }}
-                {{ $level1Team = "Wholesale Support" }}
+            {{ else if eq .Label "BECO Assurance" }}
+                {{ $tlTeam = "Business Support TL AE" }}
+                {{ $aeTeam = "Business Support TL AE" }}
+                {{ $level1Team = "Billing" }}
             {{ end }}
 
-            <div class="rounded-lg bg-gray-900 border-2 border-indigo-800 p-4">
+                <div class="rounded-xl border-2 p-4 flex flex-col gap-3 min-h-0 {{ if gt .Count 10 }}bg-amber-950 border-amber-700{{ else }}bg-gray-900 border-indigo-700{{ end }}">
                 <h3 class="mb-3 text-md font-semibold text-white">{{ .Label }}</h3>
 
                 <div class="space-y-1 text-sm">
@@ -56,14 +57,9 @@
                             {{ index (index (index $.StateCounts .Label) $level1Team) "rona" }}
                         </span>
                     </p>
-
-                    <div class="mt-3 border-t border-gray-800 pt-2 text-xs text-gray-400">
-                        {{ range $teamName, $states := index $.StateCounts .Label }}
-                            <p>{{ $teamName }} — available: {{ index $states "available" }}</p>
-                        {{ end }}
-                    </div>
                 </div>
             </div>
+        {{ end }}
 
         {{ else }}
             <p class="text-sm text-gray-500">No calls in any queues.</p>

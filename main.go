@@ -46,9 +46,9 @@ func NewApp() *App {
 
 func (app *App) routes() {
 	app.router.HandleFunc("/", app.handleHome).Methods("GET")
-	app.router.HandleFunc("/TV", app.handleTV).Methods("GET")
+	app.router.HandleFunc("/TL", app.handleTL).Methods("GET")
 	app.router.HandleFunc("/queues", app.handleQueues).Methods("GET")
-	app.router.HandleFunc("/tvqueues", app.handleTVQueues).Methods("GET")
+	app.router.HandleFunc("/tvqueues", app.handleTLQueues).Methods("GET")
 	app.router.HandleFunc("/agents", app.handleAgents).Methods("GET")
 }
 
@@ -59,13 +59,13 @@ func (app *App) Run() {
 
 // Handlers
 func (app *App) handleHome(w http.ResponseWriter, r *http.Request) {
-	app.render(w, "home.html", PageData{
+	app.render(w, "TV.html", PageData{
 		Title: "Dashboard",
 	})
 }
 
-func (app *App) handleTV(w http.ResponseWriter, r *http.Request) {
-	app.render(w, "TV.html", PageData{
+func (app *App) handleTL(w http.ResponseWriter, r *http.Request) {
+	app.render(w, "TL.html", PageData{
 		Title: "TV View",
 	})
 }
@@ -75,6 +75,8 @@ func (app *App) handleQueues(w http.ResponseWriter, r *http.Request) {
 	csURL     := "http://dashboardbeo01.prd.aussiebb.io/api/v1/agents?team=rcs"
 	salesURL  := "http://dashboardbeo01.prd.aussiebb.io/api/v1/agents?team=rsales"
 	becoURL   := "http://dashboardbeo01.prd.aussiebb.io/api/v1/agents?team=beco"
+	activationsURL   := "http://dashboardbeo01.prd.aussiebb.io/api/v1/agents?team=beco"
+
 
 	queues, err := fetchQueueData(queueURL)
 	if err != nil {
@@ -104,20 +106,29 @@ func (app *App) handleQueues(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	activationsAgents, err := fetchAgentData(activationsURL)
+	if err != nil {
+		http.Error(w, "Failed to fetch sales agent data", http.StatusInternalServerError)
+		log.Println("failed to fetch sales agent data:", err)
+		return
+	}
+
 	app.renderPartial(w, "queues.html", PageData{
 		Queues: queues,
 		StateCounts: map[string]map[string]map[string]int{
 			"Res CS":    countByState(csAgents),
 			"Res Sales": countByState(salesAgents),
 			"BECO Assurance": countByState(becoAgents),
+			"Res Activations": countByState(activationsAgents),
 		},
 	})
 }
 
-func (app *App) handleTVQueues(w http.ResponseWriter, r *http.Request) {
+func (app *App) handleTLQueues(w http.ResponseWriter, r *http.Request) {
 	queueURL := "http://dashboardbeo01.prd.aussiebb.io/api/v1/queues/"
 	csURL    := "http://dashboardbeo01.prd.aussiebb.io/api/v1/agents?team=rcs"
 	salesURL := "http://dashboardbeo01.prd.aussiebb.io/api/v1/agents?team=rsales"
+	activationsURL   := "http://dashboardbeo01.prd.aussiebb.io/api/v1/agents?team=beco"
 
 	queues, err := fetchQueueData(queueURL)
 	if err != nil {
@@ -140,11 +151,20 @@ func (app *App) handleTVQueues(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	activationsAgents, err := fetchAgentData(activationsURL)
+	if err != nil {
+		http.Error(w, "Failed to fetch sales agent data", http.StatusInternalServerError)
+		log.Println("failed to fetch sales agent data:", err)
+		return
+	}
+
 	app.renderPartial(w, "tvQueues.html", PageData{
 		Queues: queues,
 		StateCounts: map[string]map[string]map[string]int{
 			"Res CS":    countByState(csAgents),
 			"Res Sales": countByState(salesAgents),
+			"BECO Assurance": countByState(becoAgents),
+			"Res Activations": countByState(activationsAgents),
 		},
 	})
 }
