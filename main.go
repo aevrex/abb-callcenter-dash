@@ -75,7 +75,7 @@ func (app *App) handleQueues(w http.ResponseWriter, r *http.Request) {
 	csURL     := "http://dashboardbeo01.prd.aussiebb.io/api/v1/agents?team=rcs"
 	salesURL  := "http://dashboardbeo01.prd.aussiebb.io/api/v1/agents?team=rsales"
 	becoURL   := "http://dashboardbeo01.prd.aussiebb.io/api/v1/agents?team=beco"
-	activationsURL   := "http://dashboardbeo01.prd.aussiebb.io/api/v1/agents?team=beco"
+	activationsURL   := "http://dashboardbeo01.prd.aussiebb.io/api/v1/agents?team=rca"
 
 
 	queues, err := fetchQueueData(queueURL)
@@ -128,7 +128,8 @@ func (app *App) handleTLQueues(w http.ResponseWriter, r *http.Request) {
 	queueURL := "http://dashboardbeo01.prd.aussiebb.io/api/v1/queues/"
 	csURL    := "http://dashboardbeo01.prd.aussiebb.io/api/v1/agents?team=rcs"
 	salesURL := "http://dashboardbeo01.prd.aussiebb.io/api/v1/agents?team=rsales"
-	activationsURL   := "http://dashboardbeo01.prd.aussiebb.io/api/v1/agents?team=beco"
+	becoURL   := "http://dashboardbeo01.prd.aussiebb.io/api/v1/agents?team=beco"
+	activationsURL   := "http://dashboardbeo01.prd.aussiebb.io/api/v1/agents?team=rca"
 
 	queues, err := fetchQueueData(queueURL)
 	if err != nil {
