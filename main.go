@@ -74,6 +74,7 @@ func (app *App) handleQueues(w http.ResponseWriter, r *http.Request) {
 	queueURL  := "http://dashboardbeo01.prd.aussiebb.io/api/v1/queues/"
 	csURL     := "http://dashboardbeo01.prd.aussiebb.io/api/v1/agents?team=rcs"
 	salesURL  := "http://dashboardbeo01.prd.aussiebb.io/api/v1/agents?team=rsales"
+	becoURL   := "http://dashboardbeo01.prd.aussiebb.io/api/v1/agents?team=beco"
 
 	queues, err := fetchQueueData(queueURL)
 	if err != nil {
@@ -96,16 +97,19 @@ func (app *App) handleQueues(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Printf("sales agents: %d", len(salesAgents))
-for k, v := range countByState(salesAgents) {
-    log.Printf("  team: %q → %v", k, v)
-}
+	becoAgents, err := fetchAgentData(becoURL)
+	if err != nil {
+		http.Error(w, "Failed to fetch sales agent data", http.StatusInternalServerError)
+		log.Println("failed to fetch sales agent data:", err)
+		return
+	}
 
 	app.renderPartial(w, "queues.html", PageData{
 		Queues: queues,
 		StateCounts: map[string]map[string]map[string]int{
 			"Res CS":    countByState(csAgents),
 			"Res Sales": countByState(salesAgents),
+			"BECO Assurance": countByState(becoAgents),
 		},
 	})
 }
