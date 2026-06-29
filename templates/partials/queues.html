@@ -1,31 +1,70 @@
 {{ define "queues.html" }}
     <div class="grid gap-4 sm:grid-cols-3 lg:grid-cols-6">
         {{ range .Queues }}
+
+            {{ $tlTeam := "Level 2 CS" }}
+            {{ $aeTeam := "Customer Service - AE" }}
+            {{ $level1Team := "Customer Service" }}
+
+            {{ if eq .Label "Res Sales" }}
+                {{ $tlTeam = "TL Sales" }}
+                {{ $aeTeam = "Sales - AE" }}
+                {{ $level1Team = "Sales" }}
+            {{ else if eq .Label "Billing" }}
+                {{ $tlTeam = "Level 2 Billing" }}
+                {{ $aeTeam = "Billing - AE" }}
+                {{ $level1Team = "Billing" }}
+            {{ else if eq .Label "Wholesale Support" }}
+                {{ $tlTeam = "Level 2 Wholesale" }}
+                {{ $aeTeam = "Wholesale - AE" }}
+                {{ $level1Team = "Wholesale Support" }}
+            {{ end }}
+
             <div class="rounded-lg bg-gray-900 border-2 border-indigo-800 p-4">
                 <h3 class="mb-3 text-md font-semibold text-white">{{ .Label }}</h3>
+
                 <div class="space-y-1 text-sm">
                     <p class="flex justify-between gap-2">
                         <span class="text-gray-500">In Queue</span>
                         <span class="font-medium text-gray-100">{{ .Count }}</span>
                     </p>
+
                     <p class="flex justify-between gap-2">
                         <span class="text-gray-500">Queue Time</span>
                         <span class="font-medium text-gray-100">{{ .Longest }}</span>
                     </p>
+
+                    <h3 class="mt-2 text-sm font-semibold text-white">Level 2 Availability</h3>
+
                     <p class="flex justify-between gap-2">
-                        <span class="text-gray-500">TL Available</span>
-                        <span class="font-medium text-emerald-400">{{ index (index (index $.StateCounts .Label) "Level 2 CS") "available" }}</span>
+                        <span class="text-gray-500">Team Leader</span>
+                        <span class="font-medium text-emerald-400">
+                            {{ index (index (index $.StateCounts .Label) $tlTeam) "available" }}
+                        </span>
                     </p>
+
                     <p class="flex justify-between gap-2">
-                        <span class="text-gray-500">AE Available</span>
-                        <span class="font-medium text-emerald-400">{{ index (index (index $.StateCounts .Label) "Customer Service - AE") "available" }}</span>
+                        <span class="text-gray-500">Aussie Expert</span>
+                        <span class="font-medium text-emerald-400">
+                            {{ index (index (index $.StateCounts .Label) $aeTeam) "available" }}
+                        </span>
                     </p>
+
                     <p class="flex justify-between gap-2">
                         <span class="text-gray-500">In RONA</span>
-                        <span class="font-medium text-red-400">{{ index (index (index $.StateCounts .Label) "Level1") "rona" }}</span>
+                        <span class="font-medium text-red-400">
+                            {{ index (index (index $.StateCounts .Label) $level1Team) "rona" }}
+                        </span>
                     </p>
+
+                    <div class="mt-3 border-t border-gray-800 pt-2 text-xs text-gray-400">
+                        {{ range $teamName, $states := index $.StateCounts .Label }}
+                            <p>{{ $teamName }} — available: {{ index $states "available" }}</p>
+                        {{ end }}
+                    </div>
                 </div>
             </div>
+
         {{ else }}
             <p class="text-sm text-gray-500">No calls in any queues.</p>
         {{ end }}

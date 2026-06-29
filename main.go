@@ -96,6 +96,11 @@ func (app *App) handleQueues(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	log.Printf("sales agents: %d", len(salesAgents))
+for k, v := range countByState(salesAgents) {
+    log.Printf("  team: %q → %v", k, v)
+}
+
 	app.renderPartial(w, "queues.html", PageData{
 		Queues: queues,
 		StateCounts: map[string]map[string]map[string]int{
@@ -135,7 +140,7 @@ func (app *App) handleTVQueues(w http.ResponseWriter, r *http.Request) {
 		Queues: queues,
 		StateCounts: map[string]map[string]map[string]int{
 			"Res CS":    countByState(csAgents),
-			"Residential Sales": countByState(salesAgents),
+			"Res Sales": countByState(salesAgents),
 		},
 	})
 }
