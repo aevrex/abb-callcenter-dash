@@ -151,6 +151,13 @@ func (app *App) handleTLQueues(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	becoAgents, err := fetchAgentData(becoURL)
+	if err != nil {
+		http.Error(w, "Failed to fetch sales agent data", http.StatusInternalServerError)
+		log.Println("failed to fetch sales agent data:", err)
+		return
+	}
+
 	activationsAgents, err := fetchAgentData(activationsURL)
 	if err != nil {
 		http.Error(w, "Failed to fetch sales agent data", http.StatusInternalServerError)
