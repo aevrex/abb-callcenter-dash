@@ -1,6 +1,9 @@
 {{ define "tvQueues.html" }}
 <div class="h-full min-h-0 bg-gray-950">
-    <div class="grid h-full min-h-0 grid-cols-3 grid-rows-2 gap-4">
+    <div class="grid h-full min-h-0 gap-4
+        grid-cols-1 auto-rows-fr
+        sm:grid-cols-2
+        lg:grid-cols-3 lg:grid-rows-2">
 
         {{ range .Queues }}
             {{ if and (ne .Label "Wholesale Support") (ne .Label "SMB Inbound Sales") }}
@@ -12,10 +15,10 @@
                     {{ $tlTeam = "TL Sales" }}
                     {{ $aeTeam = "Sales - AE" }}
                     {{ $level1Team = "Residential Sales" }}
-                {{ else if eq .Label "Billing" }}
-                    {{ $tlTeam = "Level 2 Billing" }}
-                    {{ $aeTeam = "Billing - AE" }}
-                    {{ $level1Team = "Billing" }}
+                {{ else if eq .Label "Res Activations" }}
+                    {{ $tlTeam = "" }}
+                    {{ $aeTeam = "Activations - L2" }}
+                    {{ $level1Team = "Residential Customer Activations" }}
                 {{ else if eq .Label "BECO Assurance" }}
                     {{ $tlTeam = "Business Support TL AE" }}
                     {{ $aeTeam = "Business Support TL AE" }}
@@ -23,33 +26,36 @@
                 {{ end }}
 
                 <div class="rounded-xl border-2 p-4 flex flex-col gap-3 min-h-0 {{ if gt .Count 10 }}bg-amber-950 border-amber-700{{ else }}bg-gray-900 border-indigo-700{{ end }}">
-                    <h3 class="shrink-0 text-xl font-bold text-white tracking-wide border-b border-indigo-900 pb-2 truncate">
+                    <h3 class="shrink-0 font-bold text-white tracking-wide border-b border-indigo-900 pb-2 truncate
+                        text-lg sm:text-xl">
                         {{ .Label }}
                     </h3>
 
                     <div class="shrink-0 grid grid-cols-2 gap-3">
                         <div class="rounded-lg bg-gray-800 p-3 text-center">
                             <p class="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-1">In Queue</p>
-                            <p class="text-5xl font-black text-white leading-none">{{ .Count }}</p>
+                            <p class="font-black text-white leading-none
+                                text-4xl sm:text-5xl">{{ .Count }}</p>
                         </div>
                         <div class="rounded-lg bg-gray-800 p-3 text-center">
                             <p class="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-1">Wait Time</p>
-                            <p class="text-4xl font-black text-white leading-none truncate">{{ .Longest }}</p>
+                            <p class="font-black text-white leading-none truncate
+                                text-3xl sm:text-4xl">{{ .Longest }}</p>
                         </div>
                     </div>
 
                     <div class="flex-1 min-h-0 flex flex-col justify-evenly gap-2">
-                        <div class="flex items-center justify-between rounded-lg bg-emerald-950 border border-emerald-800 px-4 py-2">
-                            <span class="text-sm font-semibold text-emerald-400 uppercase tracking-wide">TL Available</span>
-                            <span class="text-3xl font-black text-emerald-300">{{ index (index (index $.StateCounts .Label) $tlTeam) "available" }}</span>
+                        <div class="flex items-center justify-between rounded-lg bg-emerald-950 border border-emerald-800 px-3 py-2 sm:px-4">
+                            <span class="text-xs sm:text-sm font-semibold text-emerald-400 uppercase tracking-wide">TL Available</span>
+                            <span class="text-2xl sm:text-3xl font-black text-emerald-300">{{ index (index (index $.StateCounts .Label) $tlTeam) "available" }}</span>
                         </div>
-                        <div class="flex items-center justify-between rounded-lg bg-emerald-950 border border-emerald-800 px-4 py-2">
-                            <span class="text-sm font-semibold text-emerald-400 uppercase tracking-wide">AE Available</span>
-                            <span class="text-3xl font-black text-emerald-300">{{ index (index (index $.StateCounts .Label) $aeTeam) "available" }}</span>
+                        <div class="flex items-center justify-between rounded-lg bg-emerald-950 border border-emerald-800 px-3 py-2 sm:px-4">
+                            <span class="text-xs sm:text-sm font-semibold text-emerald-400 uppercase tracking-wide">AE Available</span>
+                            <span class="text-2xl sm:text-3xl font-black text-emerald-300">{{ index (index (index $.StateCounts .Label) $aeTeam) "available" }}</span>
                         </div>
-                        <div class="flex items-center justify-between rounded-lg bg-red-950 border border-red-800 px-4 py-2">
-                            <span class="text-sm font-semibold text-red-400 uppercase tracking-wide">In RONA</span>
-                            <span class="text-3xl font-black text-red-300">{{ index (index (index $.StateCounts .Label) $level1Team) "rona" }}</span>
+                        <div class="flex items-center justify-between rounded-lg bg-red-950 border border-red-800 px-3 py-2 sm:px-4">
+                            <span class="text-xs sm:text-sm font-semibold text-red-400 uppercase tracking-wide">In RONA</span>
+                            <span class="text-2xl sm:text-3xl font-black text-red-300">{{ index (index (index $.StateCounts .Label) $level1Team) "rona" }}</span>
                         </div>
                     </div>
 

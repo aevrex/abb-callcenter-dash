@@ -5,11 +5,11 @@
         {{/* Available */}}
         <div class="rounded-lg bg-gray-900 border-2 border-emerald-800 p-4 flex flex-col min-h-0">
             <h3 class="mb-3 shrink-0 text-sm font-semibold text-emerald-400">Available</h3>
-            <div class="flex-1 min-h-0 flex flex-col flex-wrap gap-1 overflow-x-auto content-start">
+            <div class="flex-1 min-h-0 grid grid-cols-[repeat(auto-fit,minmax(10rem,1fr))] auto-rows-min gap-1 overflow-y-auto">
                 {{ range .Agents }}
                     {{ if and (eq .State "available") (ne .TeamName "Level 2 CS") (ne .TeamName "Customer Service - AE") }}
-                        <div class="rounded-md bg-emerald-900 px-3 py-2">
-                            <div class="flex items-center justify-between gap-2">
+                        <div class="w-56 max-w-full rounded-md bg-emerald-900 px-2 py-1">
+                            <div class="flex items-center justify-between gap-1">
                                 <strong class="truncate text-sm text-gray-100">{{ index .Name 0 }}</strong>
                                 <span class="shrink-0 text-xs text-gray-500">{{ .StatusChange }}</span>
                             </div>
@@ -40,6 +40,7 @@
                         <div class="w-56 max-w-full rounded-md bg-blue-900 px-2 py-1">
                             <div class="flex items-center justify-between gap-1">
                                 <strong class="truncate text-sm text-gray-100">{{ index .Name 0 }}</strong>
+                                <span class="shrink-0 text-xs text-gray-500">{{ .State }}</span>
                                 <span class="shrink-0 text-xs text-gray-500">{{ .StatusChange }}</span>
                             </div>
                         </div>
@@ -63,8 +64,8 @@
                         (ne .TeamName "Customer Service - AE") 
                         (ne .TeamName "CS Team Managers") 
                     }}                        
-                        <div class="rounded-md bg-red-900 px-3 py-2">
-                            <div class="flex items-center justify-between gap-4">
+                        <div class="w-56 max-w-full rounded-md bg-red-900 px-2 py-1">
+                            <div class="flex items-center justify-between gap-1">
                                 <strong class="truncate text-sm text-gray-100">{{ index .Name 0 }}</strong>
                                 <span class="shrink-0 text-xs text-gray-500">{{ .State }}</span>
                                 <span class="shrink-0 text-xs text-gray-500">{{ .StatusChange }}</span>

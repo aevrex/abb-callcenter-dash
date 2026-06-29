@@ -11,10 +11,10 @@
                 {{ $tlTeam = "TL Sales" }}
                 {{ $aeTeam = "Sales - AE" }}
                 {{ $level1Team = "Residential Sales" }}
-            {{ else if eq .Label "Billing" }}
-                {{ $tlTeam = "Level 2 Billing" }}
-                {{ $aeTeam = "Billing - AE" }}
-                {{ $level1Team = "Billing" }}
+            {{ else if eq .Label "Res Activations" }}
+                {{ $tlTeam = "" }}
+                {{ $aeTeam = "Activations - L2" }}
+                {{ $level1Team = "Residential Customer Activations" }}
             {{ else if eq .Label "BECO Assurance" }}
                 {{ $tlTeam = "Business Support TL AE" }}
                 {{ $aeTeam = "Business Support TL AE" }}

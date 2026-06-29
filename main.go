@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"sort"
 
 	"github.com/gorilla/mux"
 )
@@ -32,6 +33,7 @@ type AgentData struct {
 	TeamName     string   `json:"teamName"`
 	StatusChange string   `json:"last_status_change"`
 	State        string   `json:"raw_status"`
+	Started2     int64    `json:"started2"`
 }
 
 func NewApp() *App {
@@ -186,6 +188,10 @@ func (app *App) handleAgents(w http.ResponseWriter, r *http.Request) {
 		log.Println("failed to fetch agent data:", err)
 		return
 	}
+
+	sort.Slice(agents, func(i, j int) bool {
+		return agents[i].Started2 < agents[j].Started2
+	})
 
 	app.renderPartial(w, "agents.html", PageData{
 		Agents: agents,
