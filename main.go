@@ -6,7 +6,8 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	"sort"
+	"slices"
+	"cmp"
 
 	"github.com/gorilla/mux"
 )
@@ -50,7 +51,7 @@ func (app *App) routes() {
 	app.router.HandleFunc("/", app.handleHome).Methods("GET")
 	app.router.HandleFunc("/TL", app.handleTL).Methods("GET")
 	app.router.HandleFunc("/queues", app.handleQueues).Methods("GET")
-	app.router.HandleFunc("/tvqueues", app.handleTLQueues).Methods("GET")
+	app.router.HandleFunc("/tvqueues", app.handleQueues).Methods("GET")
 	app.router.HandleFunc("/agents", app.handleAgents).Methods("GET")
 }
 
@@ -115,60 +116,13 @@ func (app *App) handleQueues(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	app.renderPartial(w, "queues.html", PageData{
-		Queues: queues,
-		StateCounts: map[string]map[string]map[string]int{
-			"Res CS":    countByState(csAgents),
-			"Res Sales": countByState(salesAgents),
-			"BECO Assurance": countByState(becoAgents),
-			"Res Activations": countByState(activationsAgents),
-		},
-	})
-}
+	templateFile := "tvQueues.html"
 
-func (app *App) handleTLQueues(w http.ResponseWriter, r *http.Request) {
-	queueURL := "http://dashboardbeo01.prd.aussiebb.io/api/v1/queues/"
-	csURL    := "http://dashboardbeo01.prd.aussiebb.io/api/v1/agents?team=rcs"
-	salesURL := "http://dashboardbeo01.prd.aussiebb.io/api/v1/agents?team=rsales"
-	becoURL   := "http://dashboardbeo01.prd.aussiebb.io/api/v1/agents?team=beco"
-	activationsURL   := "http://dashboardbeo01.prd.aussiebb.io/api/v1/agents?team=rca"
-
-	queues, err := fetchQueueData(queueURL)
-	if err != nil {
-		http.Error(w, "Failed to fetch queue data", http.StatusInternalServerError)
-		log.Println("failed to fetch queue data:", err)
-		return
+	if r.URL.Path == "/TL" {
+		templateFile = "queues.html"
 	}
 
-	csAgents, err := fetchAgentData(csURL)
-	if err != nil {
-		http.Error(w, "Failed to fetch CS agent data", http.StatusInternalServerError)
-		log.Println("failed to fetch CS agent data:", err)
-		return
-	}
-
-	salesAgents, err := fetchAgentData(salesURL)
-	if err != nil {
-		http.Error(w, "Failed to fetch sales agent data", http.StatusInternalServerError)
-		log.Println("failed to fetch sales agent data:", err)
-		return
-	}
-
-	becoAgents, err := fetchAgentData(becoURL)
-	if err != nil {
-		http.Error(w, "Failed to fetch sales agent data", http.StatusInternalServerError)
-		log.Println("failed to fetch sales agent data:", err)
-		return
-	}
-
-	activationsAgents, err := fetchAgentData(activationsURL)
-	if err != nil {
-		http.Error(w, "Failed to fetch sales agent data", http.StatusInternalServerError)
-		log.Println("failed to fetch sales agent data:", err)
-		return
-	}
-
-	app.renderPartial(w, "tvQueues.html", PageData{
+	app.renderPartial(w, templateFile, PageData{
 		Queues: queues,
 		StateCounts: map[string]map[string]map[string]int{
 			"Res CS":    countByState(csAgents),
@@ -189,8 +143,8 @@ func (app *App) handleAgents(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sort.Slice(agents, func(i, j int) bool {
-		return agents[i].Started2 < agents[j].Started2
+	slices.SortFunc(agents, func(a, b AgentData) int {
+		return cmp.Compare(a.Started2, b.Started2)
 	})
 
 	app.renderPartial(w, "agents.html", PageData{
