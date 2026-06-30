@@ -69,7 +69,7 @@ func (app *App) handleHome(w http.ResponseWriter, r *http.Request) {
 
 func (app *App) handleTL(w http.ResponseWriter, r *http.Request) {
 	app.render(w, "TL.html", PageData{
-		Title: "TV View",
+		Title: "TL View",
 	})
 }
 
@@ -118,7 +118,7 @@ func (app *App) handleQueues(w http.ResponseWriter, r *http.Request) {
 
 	templateFile := "tvQueues.html"
 
-	if r.URL.Path == "/TL" {
+	if r.URL.Path == "/queues" {
 		templateFile = "queues.html"
 	}
 
