@@ -34,7 +34,7 @@ type AgentData struct {
 	TeamName     string   `json:"teamName"`
 	StatusChange string   `json:"last_status_change"`
 	State        string   `json:"raw_status"`
-	Started2     int64    `json:"started2"`
+	Timestamp     int64    `json:"timestamp"`
 }
 
 func NewApp() *App {
@@ -144,7 +144,7 @@ func (app *App) handleAgents(w http.ResponseWriter, r *http.Request) {
 	}
 
 	slices.SortFunc(agents, func(a, b AgentData) int {
-		return cmp.Compare(a.Started2, b.Started2)
+		return cmp.Compare(a.Timestamp, b.Timestamp)
 	})
 
 	app.renderPartial(w, "agents.html", PageData{
